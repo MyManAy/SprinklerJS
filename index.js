@@ -18,12 +18,13 @@ client.on("message", message => {
     if (!!message.author.bot) return;
     function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
+        let safeAttempt = message.content.match(/[rin]$/);
         if (num < 3) {
             if (match !== null) {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
-            } else if (message.content.match(/[rin]$/ === null)) {
+            } else if (safeAttempt === null) {
                 count = 0;
                 evidence = [];
             }
