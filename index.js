@@ -12,6 +12,7 @@ const iRegex = /(i+\s*)+(?=((n+\s*)+)?$)/gi;
 const nRegex = /(n+\s*)+$/gi;
 const regexRecurs = [rRegex, iRegex, nRegex];
 var count = 0;
+var trueCount = 0;
 let evidence = [];
 
 client.on("message", message => {
@@ -23,10 +24,7 @@ client.on("message", message => {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
-            } else if (match === null) {
-                count = 0;
-                evidence = [];
-            }
+            } 
         } else {
             message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
             evidence = [];
