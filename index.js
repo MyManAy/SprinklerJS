@@ -25,7 +25,7 @@ client.on("message", message => {
                 rinAlg(num + 1);
             }
         } else {
-            message.channel.send(`warning: consecutive messages containing ${evidence.join('')}'`);
+            message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
             evidence = [];
             count = 0;
         }
