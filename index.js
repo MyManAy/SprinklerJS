@@ -23,6 +23,9 @@ client.on("message", message => {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
+            } else if (message.content.match(iRegex) === null){
+                evidence = [];
+                count = 0;
             }
         } else {
             message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
