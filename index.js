@@ -23,15 +23,16 @@ client.on("message", message => {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
-            } else {
-                evidence = [];
+            } else if (match === null) {
                 count = 0;
+                evidence = [];
             }
         } else {
             message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
             evidence = [];
             count = 0;
         }
+        
     }
     rinAlg(count);
     
