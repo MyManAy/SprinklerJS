@@ -23,7 +23,7 @@ client.on("message", message => {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
-            } else if (message.content.match(iRegex) === null){
+            } else {
                 evidence = [];
                 count = 0;
             }
