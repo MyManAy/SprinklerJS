@@ -19,8 +19,13 @@ client.on("message", message => {
     function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
         let safeAttempt = message.content.match(/[rin]$/);
+        let pure = message.content.match(/(r+\s*)+(i+\s*)+(n+\s*)+/gi)
         if (num < 3) {
-            if (match !== null) {
+            if (pure !== null) {
+                message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
+                evidence = [];
+                count = 0;
+            } else if (match !== null) {
                 evidence.push(match);
                 count += 1;
                 rinAlg(num + 1);
