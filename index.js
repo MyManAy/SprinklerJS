@@ -7,8 +7,7 @@ client.once('ready', () => {
 });
 
 
-const rRegex = /(r+[\W\s_]*)+(?=(([li]+[\W\s_]*)+((n+[\W\s_]*)+)?)?$)/gi;
-const iRegex = /([li]+[\W\s_]*)+(?=((n+[\W\s_]*)+)?$)/gi;
+const rRegex = /(r+[\W\s_]*)+(?=(([il]+[\W\s_]*)+((n+[\W\s_]*)+)?)?$)/gi;
 const nRegex = /(n+[\W\s_]*)+$/gi;
 const regexRecurs = [rRegex, iRegex, nRegex];
 var count = 0;
