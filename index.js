@@ -18,7 +18,7 @@ client.on("message", message => {
     if (!!message.author.bot) return;
     function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
-        let safeAttempt = message.content.match(/[rin]$/);
+        let safeAttempt = message.content.match(/[rin]$/gi);
         let pure = message.content.match(/[\W\s_]+(r+[\W\s_]*)+(i+[\W\s_]*)+(n+[\W\s_]*)+[\W\s_]+/gi)
         if (num < 3) {
             if (pure !== null) {
