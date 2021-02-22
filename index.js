@@ -22,11 +22,11 @@ client.on("message", message => {
         let pure = message.content.match(/[\W\s_]+(r+[\W\s_]*)+(i+[\W\s_]*)+(n+[\W\s_]*)+[\W\s_]+/gi)
         if (num < 3) {
             if (pure !== null) {
-                message.channel.send(`warning: consecutive messages containing "${pure.join('')}"`);
+                message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
                 evidence = [];
                 count = 0;
             } else if (match !== null) {
-                evidence.push(match);
+                evidence.push(match.trim());
                 count += 1;
                 rinAlg(num + 1);
             } else if (safeAttempt === null) {
@@ -34,7 +34,7 @@ client.on("message", message => {
                 evidence = [];
             }
         } else {
-            message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
+            message.channel.send(`warning: consecutive messages containing "${evidence.join('').trim()}"`);
             evidence = [];
             count = 0;
         }
