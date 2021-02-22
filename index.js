@@ -22,7 +22,7 @@ client.on("message", message => {
         let pure = message.content.match(/(r+\s*)+(i+\s*)+(n+\s*)+/gi)
         if (num < 3) {
             if (pure !== null) {
-                message.channel.send(`warning: consecutive messages containing "${evidence.join('')}"`);
+                message.channel.send(`warning: consecutive messages containing "${pure.join('')}"`);
                 evidence = [];
                 count = 0;
             } else if (match !== null) {
