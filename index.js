@@ -26,7 +26,7 @@ client.on("message", message => {
                 evidence = [];
                 count = 0;
             } else if (match !== null) {
-                evidence.push(match.trim());
+                evidence.push(match.join('').trim());
                 count += 1;
                 rinAlg(num + 1);
             } else if (safeAttempt === null) {
