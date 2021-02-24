@@ -7,9 +7,9 @@ client.once('ready', () => {
 });
 
 
-const rRegex = /(^|[\W\s_]+)(r+[\W\s_]*)+(?=(([il]+[\W\s_]*)+((n+[\W\s_]*)+)?)?$)/gi;
-const iRegex = /((?<=^r*)|(?<=[\W\s_]+r*))([il]+[\W\s_]*)+(?=((n+[\W\s_]*)+)?$)/gi;
-const nRegex = /((?<=^r*i*)|(?<=[\W\s_]+r*i*))(n+[\W\s_]*)+$/gi;
+const rRegex = /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
+const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
+const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
 const regexRecurs = [rRegex, iRegex, nRegex];
 var count = 0;
 let evidence = [];
