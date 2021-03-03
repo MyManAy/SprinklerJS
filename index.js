@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 
 function send_to_channel(channel_id) {
-    const found_channel = client.channels.cache.find(channel => channel.id === str(channel_id));
+    const found_channel = client.channels.cache.find(channel => channel.id === toString(channel_id));
     found_channel.send("test");
 }
 
