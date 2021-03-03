@@ -2,8 +2,14 @@ const Discord = require("discord.js");
 
 const client = new Discord.Client();
 
+function send_to_channel(channel_id) {
+    const found_channel = bot.channels.cache.find(channel => channel.id === str(channel_id));
+    found_channel.send("test");
+}
+
 client.once('ready', () => {
     console.log("we in this bitch");
+    send_to_channel(798611540114800691);
 });
 
 
