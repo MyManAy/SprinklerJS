@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 function send_to_channel(channel_id) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
-    found_channel.send("owo wave <@!769941139431096381>");
+    found_channel.send("eli snuggle <@!769941139431096381>");
 }
 
 client.once('ready', () => {
