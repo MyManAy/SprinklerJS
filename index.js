@@ -4,12 +4,12 @@ const client = new Discord.Client();
 
 function send_to_channel(channel_id) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
-    found_channel.send("eli snuggle <@!769941139431096381>");
+    found_channel.send("test");
 }
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    send_to_channel(798611540114800691);
+    // send_to_channel(798611540114800691);
 });
 
 
