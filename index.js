@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
-var random_words = require("random-words");
+const random_words = require("random-words");
 
 const client = new Discord.Client();
+
+const prefix = /^<>$/;
 
 function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
@@ -18,10 +20,8 @@ client.once('ready', () => {
                              - | -
                               / \\
 
-${random_words(3).join(" ").replace(/\S/gi, "_")}
+${random_words(3).join("  ").replace(/\S/gi, "_").replace(/\s/gi, "    ")}
     \`\`\``
-
-        
     );
 });
 
@@ -35,6 +35,24 @@ let evidence = [];
 
 client.on("message", message => {
     if (!!message.author.bot) return;
+
+    if (message.content.match(prefix) !== null) {
+        const args = message.content.replace(/<>/g, "").split(/ +/);
+        const command = args.shift().toLowerCase();
+        if (command === "hangman") {
+            send_to_channel(message.channel.id, 
+                `\`\`\`
+                                |                               
+                                |
+                                O
+                              - | -
+                               / \\
+            
+${random_words(3).join("  ").replace(/\S/gi, "_").replace(/\s/gi, "    ")}
+                \`\`\``
+            );
+        }
+    }
     function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
         let safeAttempt = message.content.match(/[riln\W\s_]$/gi);
