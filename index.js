@@ -74,7 +74,7 @@ ${current_status}
                 }
             }
         } else if (command === "json") {
-            send_to_channel(message.channel.id, JSON.stringify(hangman_games, null, 4));
+            send_to_channel(message.channel.id, `\`\`\`\n${JSON.stringify(hangman_games, null, 4)}\n\`\`\``);
         }
     }
     function rinAlg(num) {
