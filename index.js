@@ -18,7 +18,7 @@ client.once('ready', () => {
     for (var i = 0; i < list.length; i++) {
         empty.push(list[i].split("").join(" "));
     }
-    send_to_channel(message.channel.id, 
+    send_to_channel(820518033520984064, 
         `\`\`\`                                
                                 |                   
                                 |
