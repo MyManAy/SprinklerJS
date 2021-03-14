@@ -3,7 +3,7 @@ const random_words = require("random-words");
 
 const client = new Discord.Client();
 
-const prefix = /^<>$/;
+const prefix = /^<.*>$/;
 
 function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
@@ -12,16 +12,22 @@ function send_to_channel(channel_id, message) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    send_to_channel(820518033520984064, 
-    `\`\`\`
-                               |                               
-                               |
-                               O
-                             - | -
-                              / \\
+    var list = random_words(3)
+    var empty = []
 
-${random_words(3).join("  ").replace(/\S/gi, "_").replace(/\s/gi, "    ")}
-    \`\`\``
+    for (var i = 0; i < list.length; i++) {
+        empty.push(list[i].split("").join(" "));
+    }
+    send_to_channel(message.channel.id, 
+        `\`\`\`                                
+                                |                   
+                                |
+                                O
+                              - | -
+                               / \\
+    
+${empty.join("    ").replace(/\S/gi, "_")}
+        \`\`\``
     );
 });
 
@@ -40,6 +46,12 @@ client.on("message", message => {
         const args = message.content.replace(/<>/g, "").split(/ +/);
         const command = args.shift().toLowerCase();
         if (command === "hangman") {
+            var list = random_words(3)
+            var empty = []
+
+            for (var i = 0; i < list.length; i++) {
+                empty.push(list[i].split("").join(" "));
+            }
             send_to_channel(message.channel.id, 
                 `\`\`\`
                                 |                               
@@ -48,7 +60,7 @@ client.on("message", message => {
                               - | -
                                / \\
             
-${random_words(3).map(function(i){return i.concat(" ")}).join("").replace(/\S/gi, "_")}
+${empty.join("    ").replace(/\S/gi, "_")}
                 \`\`\``
             );
         }
