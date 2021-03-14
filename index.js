@@ -38,7 +38,7 @@ const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
 const regexRecurs = [rRegex, iRegex, nRegex];
 var count = 0;
 let evidence = [];
-let hangman_games = {};
+var hangman_games = {};
 
 client.on("message", message => {
     if (!!message.author.bot) return;
@@ -52,7 +52,7 @@ client.on("message", message => {
             for (var i = 0; i < list.length; i++) {
                 empty.push(list[i].split("").join(" "));
             }
-            var current_status = empty.join("    ").replace(/\S/gi, "_")
+            var current_status = empty.join("    ").replace(/\S/gi, "_");
 
             hangman_games = Object.assign({ [message.author.id]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
             send_to_channel(message.channel.id, 
@@ -66,9 +66,10 @@ client.on("message", message => {
 ${current_status}
                 \`\`\``
             );
+            send_to_channel(message.channel.id, hangman_games);
         } else if (command === "guess") {
-            if (message.author.id in hangman_users) {
-                guess = args[0]
+            if (message.author.id in hangman_games) {
+                guess = args[0];
                 if (guess.length === 1) {
                     
                 }
