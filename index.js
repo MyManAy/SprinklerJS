@@ -54,7 +54,7 @@ client.on("message", message => {
             }
             var current_status = empty.join("    ").replace(/\S/gi, "_");
 
-            hangman_games = Object.assign({ [`message.author.id`]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+            hangman_games = Object.assign({ [random_words()]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
             send_to_channel(message.channel.id, 
                 `\`\`\`
                                 |                               
@@ -66,7 +66,6 @@ client.on("message", message => {
 ${current_status}
                 \`\`\``
             );
-            send_to_channel(message.channel.id, JSON.stringify(hangman_games, null, 4));
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
                 guess = args[0];
