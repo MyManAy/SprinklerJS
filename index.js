@@ -16,7 +16,8 @@ client.once('ready', () => {
                                O
                              - | -
                               / \\
-${"coolio gamer pog".split("").join(" ")}
+
+${"coolio gamer pog".split("").join(" ").replace(/\S/gi, "_")}
     \`\`\``
 
         
