@@ -9,6 +9,13 @@ function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
     found_channel.send(message);
 }
+function replaceChars(string, index, replacement) {
+    if (index >= string.length) {
+        return string.valueOf();
+    }
+ 
+    return string.substring(0, index) + replacement + string.substring(index + 1);
+}
 
 client.once('ready', () => {
     console.log("we in this bitch");
@@ -88,9 +95,23 @@ ${current_status}
                         }
                     }
                     if (!matches.length) {
-                        send_to_channel(message.channel.id, "noooope");
+                        console.log("nope");
                     } else {
-                        send_to_channel(message.channel.id, matches);
+                        var word_so_far = hangman_games[message.author.id]["current_status"];
+                        for (var i = 0; i < word_so_far.length; i++) {
+                            word_so_far = replaceChars(word_so_far, matches[i], guess);
+                        }
+                        send_to_channel(message.channel.id, 
+                            `\`\`\`
+                                |                               
+                                |
+                                O
+                              - | -
+                               / \\
+                        
+${word_so_far}
+                            \`\`\``
+                        ); 
                     }
                 }
             }

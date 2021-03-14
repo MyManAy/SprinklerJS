@@ -1,4 +1,11 @@
 const random_words = require("random-words");
+function replaceChars(string, index, replacement) {
+    if (index >= string.length) {
+        return string.valueOf();
+    }
+ 
+    return string.substring(0, index) + replacement + string.substring(index + 1);
+}
 /*const rRegex = /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
 const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
 const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
@@ -47,13 +54,17 @@ if (hangman_games[test]["complete_word"].includes("z")) {
 
 var matches = [];
 for (var i = 0; i < "apple".length; i++) {
-    if ("apple"[i] === "z") {
+    if ("apple"[i] === "p") {
         matches.push(i);
     }
 }
 if (!matches.length) {
     console.log("nope");
 } else {
-    console.log(matches);
+    var app = "apple";
+    for (var i = 0; i < matches.length; i++) {
+        app = replaceChars(app, matches[i], "_")
+    }
+    console.log(app);
 }
 
