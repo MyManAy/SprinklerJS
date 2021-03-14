@@ -3,7 +3,7 @@ const random_words = require("random-words");
 
 const client = new Discord.Client();
 
-const prefix = /^<.*>$/;
+const prefix = /^<.+>$/;
 
 function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
@@ -12,8 +12,8 @@ function send_to_channel(channel_id, message) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    var list = random_words(3)
-    var empty = []
+    var list = random_words(3);
+    var empty = [];
 
     for (var i = 0; i < list.length; i++) {
         empty.push(list[i].split("").join(" "));
@@ -43,11 +43,11 @@ client.on("message", message => {
     if (!!message.author.bot) return;
 
     if (message.content.match(prefix) !== null) {
-        const args = message.content.replace(/<>/g, "").split(/ +/);
+        const args = message.content.replace(/[<>]/g, "").split(/ +/);
         const command = args.shift().toLowerCase();
         if (command === "hangman") {
-            var list = random_words(3)
-            var empty = []
+            var list = random_words(3);
+            var empty = [];
 
             for (var i = 0; i < list.length; i++) {
                 empty.push(list[i].split("").join(" "));
