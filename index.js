@@ -9,15 +9,15 @@ function send_to_channel(channel_id, message) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    send_to_channel(813209396670234624, 
+    send_to_channel(798267022043643904, 
     `\`\`\`
-        |
-        |
-        O
-      - | -
-       / \\
+                |
+                |
+                O
+              - | -
+               / \\
       
-      _ _ _ _ _ _ _    _ _ _ _ 
+ _ _ _ _ _ _ _    _ _ _ _ 
     \`\`\``
 
         
