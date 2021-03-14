@@ -9,7 +9,6 @@ function send_to_channel(channel_id, message) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-<<<<<<< HEAD
     send_to_channel(820518033520984064, 
     `\`\`\`
                                |                               
@@ -17,15 +16,6 @@ client.once('ready', () => {
                                O
                              - | -
                               / \\
-=======
-    send_to_channel(813209396670234624, 
-    `\`\`\`
-        |
-        |
-        O
-      - | -
-       / \\
->>>>>>> parent of f200ac6 (Update index.js)
       
       _ _ _ _ _ _ _    _ _ _ _ 
     \`\`\``
