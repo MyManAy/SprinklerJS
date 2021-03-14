@@ -48,7 +48,7 @@ client.on("message", message => {
                               - | -
                                / \\
             
-${random_words(3).join("  ").replace(/\S/gi, "_").replace(/\s/gi, "    ")}
+${random_words(3).map(function(i){return i.concat(" ")}).join("").replace(/\S/gi, "_")}
                 \`\`\``
             );
         }
