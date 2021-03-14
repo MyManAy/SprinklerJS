@@ -70,7 +70,7 @@ ${current_status}
             if (message.author.id in hangman_games) {
                 send_to_channel(message.channel.id, args)
                 guess = args[0];
-                if (guess.match(/[a-z]i/) !== null) {
+                if (guess.match(/[a-z]/i) !== null) {
                     if (hangman_games[message.author.id]["complete_word"].includes(guess)) {
                         send_to_channel(message.channel.id, "yes!!!")
                     } else {
