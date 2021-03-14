@@ -66,7 +66,7 @@ client.on("message", message => {
 ${current_status}
                 \`\`\``
             );
-            send_to_channel(message.channel.id, hangman_games.toString());
+            send_to_channel(message.channel.id, JSON.stringify(hangman_games, null, 4));
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
                 guess = args[0];
@@ -75,8 +75,7 @@ ${current_status}
                 }
             }
         } else if (command === "json") {
-            send_to_channel(message.channel.id, hangman_games);
-            send_to_channel(message.channel.id, "does this work?");
+            send_to_channel(message.channel.id, JSON.stringify(hangman_games, null, 4));
         }
     }
     function rinAlg(num) {

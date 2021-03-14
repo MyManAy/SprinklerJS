@@ -41,5 +41,5 @@ console.log(current_status);
 hangman_games = Object.assign({ [test]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
 hangman_games = Object.assign({ ["jess"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
 hangman_games = Object.assign({ ["jecc"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
-console.log(hangman_games);
+console.log(JSON.stringify(hangman_games, null, 4));
 console.log(hangman_games["jess"]);
