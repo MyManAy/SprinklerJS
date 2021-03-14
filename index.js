@@ -16,8 +16,8 @@ client.once('ready', () => {
                                O
                              - | -
                               / \\
-_ _ _ _ _ _ _    _ _ _ _ 
-    \`\`\``.split(" ").join("")
+${"coolio gamer pog".split("").join(" ")}
+    \`\`\``
 
         
     );
