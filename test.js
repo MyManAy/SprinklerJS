@@ -9,6 +9,7 @@ var iRegex = new RegExp(`(?<=(^|[\W\s_]+)${search_letters[0]}*)(${search_letters
 var nRegex = new RegExp(`(?<=(^|[\W\s_]+)${search_letters[0]}*${search_letters[1]}*)(${search_letters[2]}[\W\s_]*)+(?=((s[\W\s_]*)+)?$)`, "gi");*/
 const prefix = /^<.+>$/;
 var str = "<<hangman>>";
+var empty = [];
 if (str.match(prefix) !== null) {
     console.log("yes");
     const args = str.replace(/[<>]/g, "").split(/ +/);
@@ -16,7 +17,6 @@ if (str.match(prefix) !== null) {
     console.log(args + " " + command)
     if (command === "hangman") {
         var list = random_words(3);
-        var empty = [];
 
         for (var i = 0; i < list.length; i++) {
             empty.push(list[i].split("").join(" "));
@@ -24,3 +24,21 @@ if (str.match(prefix) !== null) {
         console.log(empty);
     }
 }
+
+`
+hangman_games: [
+    user: {
+        current_status: ""
+        complete_word: ""
+    }
+]
+`
+var hangman_games = {};
+console.log(empty);
+var current_status = empty.join("    ").replace(/\S/gi, "_");
+console.log(current_status);
+hangman_games = Object.assign({ ["jeff"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+hangman_games = Object.assign({ ["jess"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+hangman_games = Object.assign({ ["jecc"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+console.log(hangman_games["jecc"]);
+console.log(hangman_games["jess"]);
