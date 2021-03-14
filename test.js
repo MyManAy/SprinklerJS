@@ -7,7 +7,7 @@ search_letters = search_word.split("")
 var rRegex = new RegExp(`(^|[\W\s_]+)(${search_letters[0]}[\W\s_]*)+(?=((${search_letters[1]}[\W\s_]*)+(((${search_letters[2]}[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)`, `gi`);
 var iRegex = new RegExp(`(?<=(^|[\W\s_]+)${search_letters[0]}*)(${search_letters[1]}[\W\s_]*)+(?=((${search_letters[2]}[\W\s_]*)+((s[\W\s_]*)+)?)?$)`, "gi");
 var nRegex = new RegExp(`(?<=(^|[\W\s_]+)${search_letters[0]}*${search_letters[1]}*)(${search_letters[2]}[\W\s_]*)+(?=((s[\W\s_]*)+)?$)`, "gi");*/
-const prefix = /^<.+>$/;
+/*const prefix = /^<.+>$/;
 var str = "<<hangman>>";
 var empty = [];
 if (str.match(prefix) !== null) {
@@ -23,7 +23,7 @@ if (str.match(prefix) !== null) {
         }
         console.log(empty);
     }
-}
+}*/
 
 `
 hangman_games: [
@@ -33,7 +33,7 @@ hangman_games: [
     }
 ]
 `
-var hangman_games = {};
+/*var hangman_games = {};
 var current_status = empty.join("    ").replace(/\S/gi, "_");
 var test = 48292459853
 
@@ -43,4 +43,17 @@ hangman_games = Object.assign(hangman_games, { ["jecc"]: { "current_status": cur
 console.log(JSON.stringify(hangman_games[test]["complete_word"], null, 4));
 if (hangman_games[test]["complete_word"].includes("z")) {
     console.log("yup")
+}*/
+
+var matches = [];
+for (var i = 0; i < "apple".length; i++) {
+    if ("apple"[i] === "z") {
+        matches.push(i);
+    }
 }
+if (!matches.length) {
+    console.log("nope");
+} else {
+    console.log(matches);
+}
+

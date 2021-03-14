@@ -68,13 +68,29 @@ ${current_status}
             );
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
-                send_to_channel(message.channel.id, typeof(args));
                 guess = args[0];
+                `var matches = [];
+                for (var i = 0; i < "apple".length; i++) {
+                    if ("apple"[i] === "z") {
+                        matches.push(i);
+                    }
+                }
+                if (!matches.length) {
+                    console.log("nope");
+                } else {
+                    console.log(matches);
+                }`
                 if (guess.match(/[a-z]/i) !== null) {
-                    if (hangman_games[message.author.id]["complete_word"].includes(guess)) {
-                        send_to_channel(message.channel.id, "yes!!!")
+                    var matches = [];
+                    for (var i = 0; i < hangman_games[message.author.id]["complete_word"].length; i++) {
+                        if (hangman_games[message.author.id]["complete_word"][i] === guess) {
+                            matches.push(i);
+                        }
+                    }
+                    if (!matches.length) {
+                        send_to_channel(message.channel.id, "noooope");
                     } else {
-                        send_to_channel(message.channel.id, "noooope")
+                        send_to_channel(message.channel.id, matches);
                     }
                 }
             }
