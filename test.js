@@ -38,8 +38,8 @@ console.log(empty);
 var current_status = empty.join("    ").replace(/\S/gi, "_");
 var test = 48292459853
 console.log(current_status);
-hangman_games = Object.assign({ [test]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
-hangman_games = Object.assign({ ["jess"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
-hangman_games = Object.assign({ ["jecc"]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+hangman_games = Object.assign(hangman_games, { [test]: { "current_status": current_status, "complete_word": empty.join("    ") } });
+hangman_games = Object.assign(hangman_games, { ["jess"]: { "current_status": current_status, "complete_word": empty.join("    ") } });
+hangman_games = Object.assign(hangman_games, { ["jecc"]: { "current_status": current_status, "complete_word": empty.join("    ") } });
 console.log(JSON.stringify(hangman_games, null, 4));
 console.log(hangman_games["jess"]);

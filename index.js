@@ -54,7 +54,7 @@ client.on("message", message => {
             }
             var current_status = empty.join("    ").replace(/\S/gi, "_");
 
-            hangman_games = Object.assign({ [`${message.author.id}`]: { "current_status": current_status, "complete_word": empty.join("    ") } }, hangman_games);
+            hangman_games = Object.assign(hangman_games, { [message.author.id]: { "current_status": current_status, "complete_word": empty.join("    ") } });
             send_to_channel(message.channel.id, 
                 `\`\`\`
                                 |                               
