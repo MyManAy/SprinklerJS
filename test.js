@@ -34,12 +34,13 @@ hangman_games: [
 ]
 `
 var hangman_games = {};
-console.log(empty);
 var current_status = empty.join("    ").replace(/\S/gi, "_");
 var test = 48292459853
-console.log(current_status);
+
 hangman_games = Object.assign(hangman_games, { [test]: { "current_status": current_status, "complete_word": empty.join("    ") } });
 hangman_games = Object.assign(hangman_games, { ["jess"]: { "current_status": current_status, "complete_word": empty.join("    ") } });
 hangman_games = Object.assign(hangman_games, { ["jecc"]: { "current_status": current_status, "complete_word": empty.join("    ") } });
-console.log(JSON.stringify(hangman_games, null, 4));
-console.log(hangman_games["jess"]);
+console.log(JSON.stringify(hangman_games[test]["complete_word"], null, 4));
+if (hangman_games[test]["complete_word"].includes("z")) {
+    console.log("yup")
+}

@@ -44,7 +44,7 @@ client.on("message", message => {
     if (!!message.author.bot) return;
 
     if (message.content.match(prefix) !== null) {
-        const args = message.content.replace(/[<>]/g, "").split(/ +/);
+        const args = message.content.replace(/[<>]/g, "").split(/\s+/);
         const command = args.shift().toLowerCase();
         if (command === "hangman") {
             var list = random_words(3);
@@ -69,8 +69,12 @@ ${current_status}
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
                 guess = args[0];
-                if (guess.length === 1) {
-                    
+                if (guess.match(/[a-z]i/) !== null) {
+                    if (hangman_games[message.author.id]["complete_word"].includes(guess)) {
+                        send_to_channel(message.channel.id, "yes!!!")
+                    } else {
+                        send_to_channel(message.channel.id, "noooope")
+                    }
                 }
             }
         } else if (command === "json") {
