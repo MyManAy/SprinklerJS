@@ -66,7 +66,7 @@ client.on("message", message => {
 ${current_status}
                 \`\`\``
             );
-            send_to_channel(message.channel.id, `${hangman_games}`);
+            send_to_channel(message.channel.id, hangman_games.toString());
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
                 guess = args[0];
