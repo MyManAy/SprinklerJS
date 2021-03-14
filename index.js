@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const random_word = require("random-words");
+var random_words = require("random-words");
 
 const client = new Discord.Client();
 
@@ -18,7 +18,7 @@ client.once('ready', () => {
                              - | -
                               / \\
 
-${random_word(3).split("").join(" ").replace(/\S/gi, "_")}
+${random_words(3).join(" ").replace(/\S/gi, "_")}
     \`\`\``
 
         
