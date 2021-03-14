@@ -2,14 +2,26 @@ const Discord = require("discord.js");
 
 const client = new Discord.Client();
 
-function send_to_channel(channel_id) {
+function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
-    found_channel.send("test");
+    found_channel.send(message);
 }
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    // send_to_channel(798611540114800691);
+    send_to_channel(813209396670234624, 
+    `\`\`\`
+        |
+        |
+        O
+      - | -
+       / \\
+      
+      _ _ _ _ _ _ _    _ _ _ _ 
+    \`\`\``
+
+        
+    );
 });
 
 
