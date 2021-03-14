@@ -9,6 +9,7 @@
   "author": "Nithin",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.5.1"
+    "discord.js": "^12.5.1",
+    "random-words": "^1.1.1"
   }
 }
