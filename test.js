@@ -52,7 +52,7 @@ if (hangman_games[test]["complete_word"].includes("z")) {
     console.log("yup")
 }*/
 
-var matches = [];
+/*var matches = [];
 for (var i = 0; i < "apple".length; i++) {
     if ("apple"[i] === "p") {
         matches.push(i);
@@ -66,5 +66,8 @@ if (!matches.length) {
         app = replaceChars(app, matches[i], "_")
     }
     console.log(app);
-}
+}*/
+list = ["ererfr"];
+console.log(typeof(parseInt(list[0])));
 
+console.log(list[0].includes("e"));

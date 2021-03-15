@@ -56,14 +56,22 @@ client.on("message", message => {
         if (command === "hangman") {
             var list = random_words(3);
             var empty = [];
+            if (args[0] === undefined || isNaN(args[0])) {
+                var lives = 6;
+                console.log("e");
+            } else {
+                var lives = parseInt(args[0]);
+                console.log("f");
+            }
             for (var i = 0; i < list.length; i++) {
                 empty.push(list[i].split("").join(" "));
             }
             var current_status = empty.join("    ").replace(/\S/gi, "_");
 
-            hangman_games = Object.assign(hangman_games, { [message.author.id]: { "current_status": current_status, "complete_word": empty.join("    ") } });
+            hangman_games = Object.assign(hangman_games, { [message.author.id]: { "current_status": current_status, "complete_word": empty.join("    "), "lives": lives } });
             send_to_channel(message.channel.id, 
                 `\`\`\`
+lives: ${lives}
                                 |                               
                                 |
                                 O
@@ -76,17 +84,6 @@ ${current_status}
         } else if (command === "guess") {
             if (message.author.id in hangman_games) {
                 guess = args[0];
-                `var matches = [];
-                for (var i = 0; i < "apple".length; i++) {
-                    if ("apple"[i] === "z") {
-                        matches.push(i);
-                    }
-                }
-                if (!matches.length) {
-                    console.log("nope");
-                } else {
-                    console.log(matches);
-                }`
                 if (guess.match(/[a-z]/i) !== null) {
                     var matches = [];
                     for (var i = 0; i < hangman_games[message.author.id]["complete_word"].length; i++) {
@@ -95,23 +92,49 @@ ${current_status}
                         }
                     }
                     if (!matches.length) {
-                        console.log("nope");
-                    } else {
-                        var word_so_far = hangman_games[message.author.id]["current_status"];
-                        for (var i = 0; i < word_so_far.length; i++) {
-                            word_so_far = replaceChars(word_so_far, matches[i], guess);
+                        hangman_games[message.author.id]["lives"]--;
+                        if (hangman_games[message.author.id]["lives"] === 0) {
+                            send_to_channel(message.channel.id, `\`\`\`diff\n- Hehe you lost all your lives. Guess your friend's gonna sleep with the fishes now >:)\n\`\`\``);
+                            delete hangman_games[message.author.id];
+                            return;
+                        } else {
+                            send_to_channel(message.channel.id, `\`\`\`diff\n- No letters found! you lost a life!\n\`\`\``);
                         }
                         send_to_channel(message.channel.id, 
                             `\`\`\`
+lives: ${hangman_games[message.author.id]["lives"]}
                                 |                               
                                 |
                                 O
                               - | -
                                / \\
                         
-${word_so_far}
+${hangman_games[message.author.id]["current_status"]}
                             \`\`\``
                         ); 
+                    } else {
+                        for (var j = 0; j < matches.length; j++) {
+                            hangman_games[message.author.id]["current_status"] = replaceChars(hangman_games[message.author.id]["current_status"], matches[j], guess);
+                        }
+                        send_to_channel(message.channel.id, `\`\`\`css\nYou found ${matches.length} letters!\n\`\`\``);
+                        send_to_channel(message.channel.id, 
+                            `\`\`\`
+lives: ${hangman_games[message.author.id]["lives"]}
+                                |                               
+                                |
+                                O
+                              - | -
+                               / \\
+                        
+${hangman_games[message.author.id]["current_status"]}
+                            \`\`\``
+                        ); 
+                        if (!hangman_games[message.author.id]["current_status"].includes("_")) {
+                            send_to_channel(message.channel.id, `\`\`\`ini\n[ Congrats! Your dumb ass managed to save your friend! ]\n\`\`\``);
+                            delete hangman_games[message.author.id];
+                            return;
+                        }
+                
                     }
                 }
             }
