@@ -68,6 +68,6 @@ if (!matches.length) {
     console.log(app);
 }*/
 list = ["ererfr"];
-console.log(typeof(parseInt(list[0])));
+console.log(list[1]);
 
 console.log(list[0].includes("e"));
