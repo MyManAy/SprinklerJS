@@ -61,7 +61,7 @@ const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
 const regexRecurs = [rRegex, iRegex, nRegex];
 var count = 0;
 let evidence = [];
-var hangman_games;
+var hangman_games = {};
 
 client.on("message", message => {
     if (!!message.author.bot) return;
