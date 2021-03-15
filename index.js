@@ -25,7 +25,7 @@ client.once('ready', () => {
     for (var i = 0; i < list.length; i++) {
         empty.push(list[i].split("").join(" "));
     }
-    send_to_channel(798266352162439258, 
+    send_to_channel(820518033520984064, 
         `
 \`\`\`bash
 \"
@@ -74,10 +74,8 @@ client.on("message", message => {
             var empty = [];
             if (args[0] === undefined || isNaN(args[0])) {
                 var lives = 6;
-                console.log("e");
             } else {
                 var lives = parseInt(args[0]);
-                console.log("f");
             }
             for (var i = 0; i < list.length; i++) {
                 empty.push(list[i].split("").join(" "));
