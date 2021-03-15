@@ -108,7 +108,7 @@ ${current_status}
                     if (!matches.length) {
                         hangman_games[message.author.id]["lives"]--;
                         if (hangman_games[message.author.id]["lives"] === 0) {
-                            send_to_channel(message.channel.id, `\`\`\`diff\n- Hehe you lost all your lives. Guess your friend's gonna sleep with the fishes now >:)\n\`\`\``);
+                            send_to_channel(message.channel.id, `\`\`\`diff\n- Hehe you lost all your lives. Guess your friend's gonna sleep with the fishes now >:)\n\nThe correct phrase was: \n+ ${hangman_games[message.author.id]["complete_word"]}\n\`\`\``);
                             delete hangman_games[message.author.id];
                             return;
                         } else {
