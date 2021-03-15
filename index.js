@@ -25,7 +25,7 @@ client.once('ready', () => {
     for (var i = 0; i < list.length; i++) {
         empty.push(list[i].split("").join(" "));
     }
-    send_to_channel(820518033520984064, 
+    send_to_channel(798266352162439258, 
         `
 \`\`\`bash
 \"
