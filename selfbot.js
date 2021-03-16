@@ -214,12 +214,7 @@ ${hangman_games[room_name]["current_status"]}
             args.forEach(item => {
                 var username = client.users.cache.get(item.replace(/[*!<@>]/g, "")).username;
                 var nickname = message.guild.members.cache.get(item.replace(/[*!<@>]/g, "")).nickname;
-                if (nickname !== null) { 
-                    invitees.push(nickname);
-                }
-                else {
-                    invitees.push(username);
-                }
+                nickname ? invitees.push(nickname) : invitees.push(username);
             });
             try {
                 if (hangman_games[room_name]["owner"] === message.author.id) {
@@ -249,6 +244,12 @@ ${hangman_games[room_name]["current_status"]}
                 send_to_channel(message.channel.id, "This game doesn't exist, please make sure you spelled it correctly");
             }
 
+        } else if (command === "rooms") {
+            var display_string = "\`\`\`\n";
+            Object.keys(hangman_games).forEach(key => {
+                display_string += `${key}, ${client.users.cache.get(hangman_games[key]["owner"]).username}, ${hangman_games[key]["isPublic"] ? "public": "private"}, access? ${hangman_games[key]["isPublic"] || hangman_games[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
+            });
+            send_to_channel(message.channel.id, display_string + "\`\`\`");
         }
     }
     function rinAlg(num) {
