@@ -67,7 +67,5 @@ if (!matches.length) {
     }
     console.log(app);
 }*/
-list = ["ererfr"];
-console.log(list[1]);
-
-console.log(list[0].includes("e"));
+;
+console.log(`${true ? "public": "private"}`);
