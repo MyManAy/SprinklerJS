@@ -252,7 +252,7 @@ ${hangman_games[room_name]["current_status"]}
             send_to_channel(message.channel.id, display_string + "\`\`\`");
         }
     }
-    function rinAlg(num) {
+    /*function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
         let safeAttempt = message.content.match(/[riln\W\s_]$/gi);
         let pure = message.content.match(/(^|[\W\s_]+)((r[\W\s_]*)+([il][\W\s_]*)+(n[\W\s_]*)+)+([\W\s_]+|$)/gi)
@@ -276,7 +276,7 @@ ${hangman_games[room_name]["current_status"]}
         }
         
     }
-    rinAlg(count);
+    rinAlg(count);*/
     
 });
 
