@@ -67,5 +67,9 @@ if (!matches.length) {
     }
     console.log(app);
 }*/
-;
-console.log(`${true ? "public": "private"}`);
+function hello(word) {
+    return word;
+}
+console.log(hello("world"));
+hello = word => word;
+console.log(hello("world"));

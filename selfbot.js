@@ -168,7 +168,9 @@ ${current_status}
                         }
                         send_to_channel(message.channel.id, 
                             `\`\`\`
+name: ${room_name}
 lives: ${hangman_games[room_name]["lives"]}
+${hangman_games[room_name]["isPublic"] ? "public": "private"}
                                 |                               
                                 |
                                 O
@@ -185,7 +187,9 @@ ${hangman_games[room_name]["current_status"]}
                         send_to_channel(message.channel.id, `\`\`\`css\nYou found ${matches.length} letters!\n\`\`\``);
                         send_to_channel(message.channel.id, 
                             `\`\`\`
+name: ${room_name}
 lives: ${hangman_games[room_name]["lives"]}
+${hangman_games[room_name]["isPublic"] ? "public": "private"}
                                 |                               
                                 |
                                 O
@@ -196,7 +200,7 @@ ${hangman_games[room_name]["current_status"]}
                             \`\`\``
                         ); 
                         if (!hangman_games[room_name]["current_status"].includes("_")) {
-                            send_to_channel(message.channel.id, `\`\`\`ini\n[ Congrats! Your dumb ass managed to save your friend! ]\n\`\`\``);
+                            send_to_channel(message.channel.id, `\`\`\`ini\n[ Congrats! You managed to save your friend! ]\n\`\`\``);
                             delete hangman_games[room_name];
                             return;
                         }
