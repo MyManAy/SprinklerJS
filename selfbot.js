@@ -21,12 +21,6 @@ function replaceChars(string, index, replacement) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    var list = random_words(3);
-    var empty = [];
-
-    for (var i = 0; i < list.length; i++) {
-        empty.push(list[i].split("").join(" "));
-    }
     send_to_channel(820518033520984064, 
         `
 \`\`\`bash
@@ -54,6 +48,9 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
         _\\///______________\\///____\\////////\\//___\\///____\\///__   
 \`\`\``
     );
+    client.guilds.cache.forEach(server => {
+        hangman_games[server.id] = {};
+    });
 });
 
 
@@ -68,6 +65,7 @@ let user_rooms = {};
 
 
 client.on("message", message => {
+    let current_hangman_lobby = hangman_games[message.guild.id];
     if (!!message.author.bot) return;
 
     if (message.content.match(prefix) !== null) {
@@ -82,7 +80,7 @@ client.on("message", message => {
             if (args[0] === undefined || Number.isInteger(args[0])) {
                 send_to_channel(message.channel.id, "please enter a game name ex: <hangman room1>");
                 return;
-            } else if (args[0] in hangman_games) {
+            } else if (args[0] in current_hangman_lobby) {
                 send_to_channel(message.channel.id, "sorry that name has already been taken");
                 return;
             } else {
@@ -103,7 +101,7 @@ client.on("message", message => {
             }
             var current_status = empty.join("    ").replace(/\S/gi, "_");
 
-            hangman_games = Object.assign(hangman_games, 
+            current_hangman_lobby = Object.assign(current_hangman_lobby, 
             { 
                 [room_name]: { 
                     "current_status": current_status, 
@@ -111,7 +109,8 @@ client.on("message", message => {
                     "lives": lives, 
                     "perms": [message.author.id],
                     "owner": message.author.id,
-                    "isPublic": isPublic
+                    "isPublic": isPublic,
+                    "guessed": []
                 } 
             });
             user_rooms[message.author.id] = room_name;
@@ -148,64 +147,70 @@ ${current_status}
                     return;
             }*/
             var room_name = user_rooms[message.author.id];
-            if (room_name in hangman_games) {
+            if (room_name in current_hangman_lobby) {
                 guess = args[0];
                 if (guess.match(/[a-z]/i) !== null) {
-                    var matches = [];
-                    for (var i = 0; i < hangman_games[room_name]["complete_word"].length; i++) {
-                        if (hangman_games[room_name]["complete_word"][i] === guess) {
-                            matches.push(i);
+                    if (!current_hangman_lobby[room_name]["guessed"].includes(guess)){
+                        current_hangman_lobby[room_name]["guessed"].push(guess);
+                        var matches = [];
+                        for (var i = 0; i < current_hangman_lobby[room_name]["complete_word"].length; i++) {
+                            if (current_hangman_lobby[room_name]["complete_word"][i] === guess) {
+                                matches.push(i);
+                            }
                         }
-                    }
-                    if (!matches.length) {
-                        hangman_games[room_name]["lives"]--;
-                        if (hangman_games[room_name]["lives"] === 0) {
-                            send_to_channel(message.channel.id, `\`\`\`diff\n- Hehe you lost all your lives. Guess your friend's gonna sleep with the fishes now >:)\n\nThe correct phrase was: \n+ ${hangman_games[room_name]["complete_word"]}\n\`\`\``);
-                            delete hangman_games[room_name];
-                            return;
+                        if (!matches.length) {
+                            current_hangman_lobby[room_name]["lives"]--;
+                            if (current_hangman_lobby[room_name]["lives"] === 0) {
+                                send_to_channel(message.channel.id, `\`\`\`diff\n- Hehe you lost all your lives. Guess your friend's gonna sleep with the fishes now >:)\n\nThe correct phrase was: \n+ ${current_hangman_lobby[room_name]["complete_word"]}\n\`\`\``);
+                                delete current_hangman_lobby[room_name];
+                                return;
+                            } else {
+                                send_to_channel(message.channel.id, `\`\`\`diff\n- No letters found! you lost a life!\n\`\`\``);
+                            }
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
+name: ${room_name}
+lives: ${current_hangman_lobby[room_name]["lives"]}
+${current_hangman_lobby[room_name]["isPublic"] ? "public": "private"}
+                                |                               
+                                |
+                                O
+                              - | -
+                               / \\
+                            
+${current_hangman_lobby[room_name]["current_status"]}
+                                \`\`\``
+                            ); 
                         } else {
-                            send_to_channel(message.channel.id, `\`\`\`diff\n- No letters found! you lost a life!\n\`\`\``);
-                        }
-                        send_to_channel(message.channel.id, 
-                            `\`\`\`
+                            for (var j = 0; j < matches.length; j++) {
+                                current_hangman_lobby[room_name]["current_status"] = replaceChars(current_hangman_lobby[room_name]["current_status"], matches[j], guess);
+                            }
+                            send_to_channel(message.channel.id, `\`\`\`css\nYou found ${matches.length} letters!\n\`\`\``);
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
 name: ${room_name}
-lives: ${hangman_games[room_name]["lives"]}
-${hangman_games[room_name]["isPublic"] ? "public": "private"}
+lives: ${current_hangman_lobby[room_name]["lives"]}
+${current_hangman_lobby[room_name]["isPublic"] ? "public": "private"}
                                 |                               
                                 |
                                 O
                               - | -
                                / \\
-                        
-${hangman_games[room_name]["current_status"]}
-                            \`\`\``
-                        ); 
+                            
+${current_hangman_lobby[room_name]["current_status"]}
+                                \`\`\``
+                            ); 
+                            if (!current_hangman_lobby[room_name]["current_status"].includes("_")) {
+                                send_to_channel(message.channel.id, `\`\`\`ini\n[ Congrats! You managed to save your friend! ]\n\`\`\``);
+                                delete current_hangman_lobby[room_name];
+                                return;
+                            }
+                    
+                        }
                     } else {
-                        for (var j = 0; j < matches.length; j++) {
-                            hangman_games[room_name]["current_status"] = replaceChars(hangman_games[room_name]["current_status"], matches[j], guess);
-                        }
-                        send_to_channel(message.channel.id, `\`\`\`css\nYou found ${matches.length} letters!\n\`\`\``);
-                        send_to_channel(message.channel.id, 
-                            `\`\`\`
-name: ${room_name}
-lives: ${hangman_games[room_name]["lives"]}
-${hangman_games[room_name]["isPublic"] ? "public": "private"}
-                                |                               
-                                |
-                                O
-                              - | -
-                               / \\
-                        
-${hangman_games[room_name]["current_status"]}
-                            \`\`\``
-                        ); 
-                        if (!hangman_games[room_name]["current_status"].includes("_")) {
-                            send_to_channel(message.channel.id, `\`\`\`ini\n[ Congrats! You managed to save your friend! ]\n\`\`\``);
-                            delete hangman_games[room_name];
-                            return;
-                        }
-                
+                        send_to_channel(message.channel.id, `You've already guessed ${guess}`);
                     }
+                    
                 }
             } else {
                 send_to_channel(message.channel.id, "You are not currently in a game! create a new game using <hangman [game name] [optional: lives]> or join another game using <join [game name]>");
@@ -221,8 +226,8 @@ ${hangman_games[room_name]["current_status"]}
                 nickname ? invitees.push(nickname) : invitees.push(username);
             });
             try {
-                if (hangman_games[room_name]["owner"] === message.author.id) {
-                    args.forEach(item => hangman_games[room_name]["perms"].push(item.replace(/[*!<@>]/g, "")));
+                if (current_hangman_lobby[room_name]["owner"] === message.author.id) {
+                    args.forEach(item => current_hangman_lobby[room_name]["perms"].push(item.replace(/[*!<@>]/g, "")));
                     send_to_channel(message.channel.id, `You have successfully invited **${invitees.join(", ")}**`);
                 } else {
                     send_to_channel(message.channel.id, "Sorry you are not the owner of this game"); 
@@ -237,8 +242,8 @@ ${hangman_games[room_name]["current_status"]}
             
         } else if (command === "join") {
             var room_name = args[0];
-            if (room_name in hangman_games) {
-                if (hangman_games[room_name]["perms"].includes(message.author.id) || hangman_games[room_name]["isPublic"]) {
+            if (room_name in current_hangman_lobby) {
+                if (current_hangman_lobby[room_name]["perms"].includes(message.author.id) || current_hangman_lobby[room_name]["isPublic"]) {
                     user_rooms[message.author.id] = room_name;
                     send_to_channel(message.channel.id, `You've joined **${room_name}**!`)
                 } else {
@@ -250,9 +255,10 @@ ${hangman_games[room_name]["current_status"]}
 
         } else if (command === "rooms") {
             var display_string = "\`\`\`\n";
-            Object.keys(hangman_games).forEach(key => {
-                display_string += `${key}, ${client.users.cache.get(hangman_games[key]["owner"]).username}, ${hangman_games[key]["isPublic"] ? "public": "private"}, access? ${hangman_games[key]["isPublic"] || hangman_games[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
+            Object.keys(current_hangman_lobby).forEach(key => {
+                display_string += `${key}, ${client.users.cache.get(current_hangman_lobby[key]["owner"]).username}, ${current_hangman_lobby[key]["isPublic"] ? "public": "private"}, access? ${current_hangman_lobby[key]["isPublic"] || current_hangman_lobby[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
             });
+            hello = () => "world";
             send_to_channel(message.channel.id, display_string + "\`\`\`");
         }
     }
@@ -283,6 +289,10 @@ ${hangman_games[room_name]["current_status"]}
     rinAlg(count);
     
 });
+
+client.on("guildCreate", server => {
+    hangman_games[server.id] = {};
+})
 
 
 client.login("ODEyOTIzODUwNjAxNzkxNTI5.YDH0VQ.iyHBPYchdoF6pYrWFzPKdwnAArI");
