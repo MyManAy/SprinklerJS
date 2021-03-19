@@ -220,14 +220,16 @@ ${current_hangman_lobby[room_name]["current_status"]}
         } else if (command === "invite") {
             var invitees = [];
             var room_name = args.shift();
-            args.forEach(item => {
-                var username = client.users.cache.get(item.replace(/[*!<@>]/g, "")).username;
-                var nickname = message.guild.members.cache.get(item.replace(/[*!<@>]/g, "")).nickname;
-                nickname ? invitees.push(nickname) : invitees.push(username);
-            });
+            
             try {
                 if (current_hangman_lobby[room_name]["owner"] === message.author.id) {
-                    args.forEach(item => current_hangman_lobby[room_name]["perms"].push(item.replace(/[*!<@>]/g, "")));
+                    args.forEach(item => {
+                        var item_id = item.replace(/[*!<@>]/g, "");
+                        current_hangman_lobby[room_name]["perms"].push(item_id);
+                        var username = client.users.cache.get(item_id).username;
+                        var nickname = message.guild.members.cache.get(item_id).nickname;
+                        nickname ? invitees.push(nickname) : invitees.push(username);
+                    })
                     send_to_channel(message.channel.id, `You have successfully invited **${invitees.join(", ")}**`);
                 } else {
                     send_to_channel(message.channel.id, "Sorry you are not the owner of this game"); 
@@ -258,7 +260,6 @@ ${current_hangman_lobby[room_name]["current_status"]}
             Object.keys(current_hangman_lobby).forEach(key => {
                 display_string += `${key}, ${client.users.cache.get(current_hangman_lobby[key]["owner"]).username}, ${current_hangman_lobby[key]["isPublic"] ? "public": "private"}, access? ${current_hangman_lobby[key]["isPublic"] || current_hangman_lobby[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
             });
-            hello = () => "world";
             send_to_channel(message.channel.id, display_string + "\`\`\`");
         }
     }
