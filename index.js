@@ -1,5 +1,11 @@
 const Discord = require("discord.js");
 const random_words = require("random-words");
+const mongoose = require("mongoose");
+
+
+mongoose.connect(process.env.MONGO_DB_CONN, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(result => console.log`Successfuly Connected with ${result}`)
+    .catch(err => console.log(`ERROR: ${err}`))
 
 const client = new Discord.Client();
 
