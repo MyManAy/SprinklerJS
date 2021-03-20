@@ -297,7 +297,15 @@ ${current_hangman_lobby[room_name]["current_status"]}
         } else if (command === "toprin") {
             console.log("rpfiewjeitge");
             let display_list = ["\`\`\`"];
-            Leaderboard.find().sort({"words_today": "desc"}).limit(10)
+            if (parseInt(args[0]) <= 30) {
+                var query_limit = parseInt(args[0]);
+            } else if (args[0] === undefined) {
+                var query_limit = 10;
+            } else {
+                send_to_channel(message.channel.id, "You can only display 30 spots at the same time");
+                return;
+            }
+            Leaderboard.find().sort({"words_today": "desc"}).limit(query_limit)
                 .then(all => {
                     all.forEach((member_data, iter) => {
                         display_list.push(`${iter+1}- ${member_data.name}: ${member_data.words_today}`);
