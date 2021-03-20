@@ -3,11 +3,12 @@ const random_words = require("random-words");
 const mongoose = require("mongoose");
 
 
-mongoose.connect(process.env.MONGO_DB_CONN, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(result => console.log`Successfuly Connected with ${result}`)
-    .catch(err => console.log(`ERROR: ${err}`));
+mongoose.connect(process.env.MONGO_DB_CONN, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const client = new Discord.Client();
+
+const Leaderboard = require("./leaderboard");
+
+const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL} });
 
 const prefix = /^<.+>$/;
 
@@ -57,6 +58,29 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
     client.guilds.cache.forEach(server => {
         hangman_games[server.id] = {};
     });
+    client.guilds.cache.forEach(server => {
+        server.members.cache.forEach(member => {
+            if (member.bot) return;
+            const leaderboard = new Leaderboard({
+
+                    _id: member.user.id,
+                    name: member.user.username,
+                    words_today: 0,
+                    avg_daily_words: 0
+               });
+
+            leaderboard.save();
+        });
+    });
+
+    console.log("epwd");
+    Leaderboard.find()
+        .then(result => {
+            console.log(result);
+        })
+        .catch(result => {
+            console.log(result);
+        });
 });
 
 
@@ -267,15 +291,33 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 display_string += `${key}, ${client.users.cache.get(current_hangman_lobby[key]["owner"]).username}, ${current_hangman_lobby[key]["isPublic"] ? "public": "private"}, access? ${current_hangman_lobby[key]["isPublic"] || current_hangman_lobby[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
             });
             send_to_channel(message.channel.id, display_string + "\`\`\`");
+        } else if (command === "rin") {
+            Leaderboard.findById(message.author.id)
+                .then(member => send_to_channel(message.channel.id, `you have said "rin" ${member.words_today.toString()} times today`));
+        } else if (command === "toprin") {
+            console.log("rpfiewjeitge");
+            let display_list = ["\`\`\`"];
+            Leaderboard.find().sort({"words_today": "desc"}).limit(10)
+                .then(all => {
+                    all.forEach((member_data, iter) => {
+                        display_list.push(`${iter+1}- ${member_data.name}: ${member_data.words_today}`);
+                        
+                    });
+                    send_to_channel(message.channel.id, display_list.join("\n") + "\`\`\`");
+                });
+
         }
     }
-    function rinAlg(num) {
+    async function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
         let safeAttempt = message.content.match(/[riln\W\s_]$/gi);
         let pure = message.content.match(/(^|[\W\s_]+)((r[\W\s_]*)+([il][\W\s_]*)+(n[\W\s_]*)+)+([\W\s_]+|$)/gi)
         if (num < 3) {
             if (pure !== null) {
-                message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
+                const rin_member = await Leaderboard.findById(message.author.id);
+                rin_member.words_today++;
+                await rin_member.save();
+                // message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
                 evidence = [];
                 count = 0;
             } else if (match !== null) {
@@ -287,7 +329,10 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 evidence = [];
             }
         } else {
-            message.channel.send(`warning: consecutive messages containing "${evidence.join('').trim()}"`);
+            const rin_member = await Leaderboard.findById(message.author.id);
+            rin_member.words_today++;
+            console.log(rin_member.words_today.toString())
+            await rin_member.save();
             evidence = [];
             count = 0;
         }
@@ -300,8 +345,6 @@ ${current_hangman_lobby[room_name]["current_status"]}
 client.on("guildCreate", server => {
     hangman_games[server.id] = {};
 })
-
-
 
 client.login(process.env.token);
 

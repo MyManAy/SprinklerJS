@@ -1,7 +1,14 @@
 const Discord = require("discord.js");
 const random_words = require("random-words");
+const mongoose = require("mongoose");
 
-const client = new Discord.Client();
+
+mongoose.connect('mongodb+srv://Nithin:LjB6WJkfECif8Df8@justnode.rmaxk.mongodb.net/word-leaderboard?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+
+
+const Leaderboard = require("./leaderboard");
+
+const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL} });
 
 const prefix = /^<.+>$/;
 
@@ -51,6 +58,29 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
     client.guilds.cache.forEach(server => {
         hangman_games[server.id] = {};
     });
+    client.guilds.cache.forEach(server => {
+        server.members.cache.forEach(member => {
+            if (member.bot) return;
+            const leaderboard = new Leaderboard({
+
+                    _id: member.user.id,
+                    name: member.user.username,
+                    words_today: 0,
+                    avg_daily_words: 0
+               });
+
+            leaderboard.save();
+        });
+    });
+
+    console.log("epwd");
+    Leaderboard.find()
+        .then(result => {
+            console.log(result);
+        })
+        .catch(result => {
+            console.log(result);
+        });
 });
 
 
@@ -220,14 +250,16 @@ ${current_hangman_lobby[room_name]["current_status"]}
         } else if (command === "invite") {
             var invitees = [];
             var room_name = args.shift();
-            args.forEach(item => {
-                var username = client.users.cache.get(item.replace(/[*!<@>]/g, "")).username;
-                var nickname = message.guild.members.cache.get(item.replace(/[*!<@>]/g, "")).nickname;
-                nickname ? invitees.push(nickname) : invitees.push(username);
-            });
+            
             try {
                 if (current_hangman_lobby[room_name]["owner"] === message.author.id) {
-                    args.forEach(item => current_hangman_lobby[room_name]["perms"].push(item.replace(/[*!<@>]/g, "")));
+                    args.forEach(item => {
+                        var item_id = item.replace(/[*!<@>]/g, "");
+                        current_hangman_lobby[room_name]["perms"].push(item_id);
+                        var username = client.users.cache.get(item_id).username;
+                        var nickname = message.guild.members.cache.get(item_id).nickname;
+                        nickname ? invitees.push(nickname) : invitees.push(username);
+                    })
                     send_to_channel(message.channel.id, `You have successfully invited **${invitees.join(", ")}**`);
                 } else {
                     send_to_channel(message.channel.id, "Sorry you are not the owner of this game"); 
@@ -258,17 +290,34 @@ ${current_hangman_lobby[room_name]["current_status"]}
             Object.keys(current_hangman_lobby).forEach(key => {
                 display_string += `${key}, ${client.users.cache.get(current_hangman_lobby[key]["owner"]).username}, ${current_hangman_lobby[key]["isPublic"] ? "public": "private"}, access? ${current_hangman_lobby[key]["isPublic"] || current_hangman_lobby[key]["perms"].includes(message.author.id) ? "✅" : "❌"} ${user_rooms[message.author.id] == key ? "🌀" : ""}\n`;
             });
-            hello = () => "world";
             send_to_channel(message.channel.id, display_string + "\`\`\`");
+        } else if (command === "rin") {
+            Leaderboard.findById(message.author.id)
+                .then(member => send_to_channel(message.channel.id, `you have said "rin" ${member.words_today.toString()} times today`));
+        } else if (command === "toprin") {
+            console.log("rpfiewjeitge");
+            let display_list = ["\`\`\`"];
+            Leaderboard.find().sort({"words_today": "desc"}).limit(10)
+                .then(all => {
+                    all.forEach((member_data, iter) => {
+                        display_list.push(`${iter+1}- ${member_data.name}: ${member_data.words_today}`);
+                        
+                    });
+                    send_to_channel(message.channel.id, display_list.join("\n") + "\`\`\`");
+                });
+
         }
     }
-    function rinAlg(num) {
+    async function rinAlg(num) {
         let match = message.content.match(regexRecurs[num]);
         let safeAttempt = message.content.match(/[riln\W\s_]$/gi);
         let pure = message.content.match(/(^|[\W\s_]+)((r[\W\s_]*)+([il][\W\s_]*)+(n[\W\s_]*)+)+([\W\s_]+|$)/gi)
         if (num < 3) {
             if (pure !== null) {
-                message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
+                const rin_member = await Leaderboard.findById(message.author.id);
+                rin_member.words_today++;
+                await rin_member.save();
+                // message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
                 evidence = [];
                 count = 0;
             } else if (match !== null) {
@@ -280,7 +329,10 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 evidence = [];
             }
         } else {
-            message.channel.send(`warning: consecutive messages containing "${evidence.join('').trim()}"`);
+            const rin_member = await Leaderboard.findById(message.author.id);
+            rin_member.words_today++;
+            console.log(rin_member.words_today.toString())
+            await rin_member.save();
             evidence = [];
             count = 0;
         }
@@ -293,6 +345,5 @@ ${current_hangman_lobby[room_name]["current_status"]}
 client.on("guildCreate", server => {
     hangman_games[server.id] = {};
 })
-
 
 client.login("ODEyOTIzODUwNjAxNzkxNTI5.YDH0VQ.iyHBPYchdoF6pYrWFzPKdwnAArI");
