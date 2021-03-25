@@ -368,10 +368,9 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                 const rin_member = await Leaderboard.findById(message.author.id);
                 rin_member.words_total++;
                 if (rin_member.timely.use_date) {
-                    var days_past_raw = (Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds;
-                    var days_past = Math.floor(days_past_raw);
-                    var weeks_past = Math.floor(Math.floor(rin_member.timely.daily.count + days_past_raw) / 7);
-                    var years_past = Math.floor(Math.floor(rin_member.timely.daily.count + days_past_raw) / 365);
+                    var days_past = Math.floor((Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds);
+                    var weeks_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.weekly.count * 7)) + days_past) / 7);
+                    var years_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.yearly.count * 365)) + days_past) / 365);
                     if (days_past >= 1) {
                         rin_member.timely.daily.words = 1;
                         rin_member.timely.daily.count += days_past;
