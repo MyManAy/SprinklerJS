@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_DB_CONN, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-
 const Leaderboard = require("./leaderboard");
 
 const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL} });
@@ -315,45 +314,45 @@ ${current_hangman_lobby[room_name]["current_status"]}
             switch(args[0]) {
                 case undefined:
                     Leaderboard.findById(message.author.id)
-                        .then(member => {
+                        .then(member => 
                             send_to_channel(message.channel.id, 
-                                ```
-                                daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
-                                weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
-                                yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
-                                ```
-                            );
-                        });
+                                `\`\`\`
+daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
+weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
+yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+                                \`\`\``
+                            )
+                        );
                     break;
                 case "daily":
                     Leaderboard.findById(message.author.id)
-                        .then(member => {
+                        .then(member => 
                             send_to_channel(message.channel.id, 
-                                ```
-                                daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
-                                ```
-                            );
-                        });
+                                `\`\`\`
+daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
+                                \`\`\``
+                            )
+                        );
                     break;
                 case "weekly":
                     Leaderboard.findById(message.author.id)
-                        .then(member => {
+                        .then(member => 
                             send_to_channel(message.channel.id, 
-                                ```
-                                weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
-                                ```
-                            );
-                        });
+                                `\`\`\`
+weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
+                                \`\`\``
+                            )
+                        );
                     break;
                 case "yearly":
                     Leaderboard.findById(message.author.id)
-                        .then(member => {
+                        .then(member => 
                             send_to_channel(message.channel.id, 
-                                ```
-                                yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
-                                ```
-                            );
-                        });
+                                `\`\`\`
+yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+                                \`\`\``
+                            )
+                        );
                     break;
                 default:
                     send_to_channel(message.channel.id, "Please enter daily, weekly, or yearly for arguments");

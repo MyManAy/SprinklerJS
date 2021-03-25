@@ -71,9 +71,10 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
                     name: member.user.username,
                     words_total: 0,
                     avg_daily_words: 0
-               });
+            });
 
             leaderboard.save();
+            
         });
     });
 
@@ -291,7 +292,6 @@ ${current_hangman_lobby[room_name]["current_status"]}
             Leaderboard.findById(message.author.id)
                 .then(member => send_to_channel(message.channel.id, `you have said "rin" ${member.words_total.toString()} times today`));
         } else if (command === "toprin") {
-            console.log("rpfiewjeitge");
             let display_list = ["\`\`\`"];
             if (parseInt(args[0]) <= 30) {
                 var query_limit = parseInt(args[0]);
@@ -310,6 +310,53 @@ ${current_hangman_lobby[room_name]["current_status"]}
                     send_to_channel(message.channel.id, display_list.join("\n") + "\`\`\`");
                 });
 
+        } else if (command === "avgrin") {
+            switch(args[0]) {
+                case undefined:
+                    Leaderboard.findById(message.author.id)
+                        .then(member => 
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
+daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
+weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
+yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+                                \`\`\``
+                            )
+                        );
+                    break;
+                case "daily":
+                    Leaderboard.findById(message.author.id)
+                        .then(member => 
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
+daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
+                                \`\`\``
+                            )
+                        );
+                    break;
+                case "weekly":
+                    Leaderboard.findById(message.author.id)
+                        .then(member => 
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
+weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
+                                \`\`\``
+                            )
+                        );
+                    break;
+                case "yearly":
+                    Leaderboard.findById(message.author.id)
+                        .then(member => 
+                            send_to_channel(message.channel.id, 
+                                `\`\`\`
+yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+                                \`\`\``
+                            )
+                        );
+                    break;
+                default:
+                    send_to_channel(message.channel.id, "Please enter daily, weekly, or yearly for arguments");
+            }
         }
     }
     async function rinAlg(num) {
