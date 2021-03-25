@@ -12,9 +12,18 @@ const leaderboardSchema = new Schema({
     words_total: {type: Number, default: 0},
     timely: {
         use_date: {type: Number},
-        daily: timelySchema,
-        weekly: timelySchema,
-        yearly: timelySchema
+        daily: {
+            count: {type: Number, default: 0},
+            words: {type: Number, default: 0}
+        },
+        weekly: {
+            count: {type: Number, default: 0},
+            words: {type: Number, default: 0}
+        },
+        yearly: {
+            count: {type: Number, default: 0},
+            words: {type: Number, default: 0}
+        }
     }
 
 });
