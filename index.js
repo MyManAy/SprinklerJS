@@ -314,7 +314,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
         } else if (command === "avgrin") {
             switch(args[0]) {
                 case undefined:
-                    const rin_member = Leaderboard.findById(message.author.id)
+                    Leaderboard.findById(message.author.id)
                         .then(member => {
                             send_to_channel(message.channel.id, 
                                 ```
@@ -326,7 +326,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
                         });
                     break;
                 case "daily":
-                    const rin_member = Leaderboard.findById(message.author.id)
+                    Leaderboard.findById(message.author.id)
                         .then(member => {
                             send_to_channel(message.channel.id, 
                                 ```
@@ -336,7 +336,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
                         });
                     break;
                 case "weekly":
-                    const rin_member = Leaderboard.findById(message.author.id)
+                    Leaderboard.findById(message.author.id)
                         .then(member => {
                             send_to_channel(message.channel.id, 
                                 ```
@@ -346,7 +346,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
                         });
                     break;
                 case "yearly":
-                    const rin_member = Leaderboard.findById(message.author.id)
+                    Leaderboard.findById(message.author.id)
                         .then(member => {
                             send_to_channel(message.channel.id, 
                                 ```
