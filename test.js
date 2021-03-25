@@ -1,11 +1,4 @@
-const random_words = require("random-words");
-function replaceChars(string, index, replacement) {
-    if (index >= string.length) {
-        return string.valueOf();
-    }
- 
-    return string.substring(0, index) + replacement + string.substring(index + 1);
-}
+
 /*const rRegex = /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
 const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
 const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
@@ -67,9 +60,36 @@ if (!matches.length) {
     }
     console.log(app);
 }*/
-function hello(word) {
-    return word;
+/*const schema = new Schema({
+    
+    guild_id: {
+        member_id: {
+            name: {type: String},
+            words_today: { type: Number },
+            avg_daily_words: { type: Number }
+        }
+    }
+
+})*/
+list  = ["Admn", "dede", "devenoper"]
+  
+if (list.some(role => {
+        switch(role) {
+            case "Admin":
+                console.log(role);
+                return true;
+                
+            case "bot access":
+                console.log(role);
+                return true;
+                
+            case "developer":
+                console.log(role);
+                return true;
+
+        }
+    })) { 
+} else {
+    console.log("Sorry you don't have the correct permissions!");
+    return;
 }
-console.log(hello("world"));
-hello = word => word;
-console.log(hello("world"));

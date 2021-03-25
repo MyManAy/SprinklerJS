@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGO_DB_CONN, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+
 const Leaderboard = require("./leaderboard");
 
 const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL} });
@@ -13,6 +14,10 @@ const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL} });
 const prefix = /^<.+>$/;
 
 const ADMIN_ID = 424006675016581122;
+
+const day_milliseconds = 86400000;
+const week_milliseconds = day_milliseconds*7;
+const year_milliseconds = day_milliseconds*365;
 
 function send_to_channel(channel_id, message) {
     const found_channel = client.channels.cache.find(channel => channel.id == channel_id);
@@ -28,7 +33,7 @@ function replaceChars(string, index, replacement) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
-    send_to_channel(820518033520984064, 
+/*    send_to_channel(820518033520984064, 
         `
 \`\`\`bash
 \"
@@ -54,7 +59,7 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
        _\\/\\\\\\_____________\\/\\\\\\__\\//\\\\\\\\\\\\\\\\/\\\\__\\/\\\\\\___\\/\\\\\\_         
         _\\///______________\\///____\\////////\\//___\\///____\\///__   
 \`\`\``
-    );
+    );*/
     client.guilds.cache.forEach(server => {
         hangman_games[server.id] = {};
     });
@@ -65,7 +70,7 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
 
                     _id: member.user.id,
                     name: member.user.username,
-                    words_today: 0,
+                    words_total: 0,
                     avg_daily_words: 0
                });
 
@@ -285,7 +290,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
             send_to_channel(message.channel.id, display_string + "\`\`\`");
         } else if (command === "rin") {
             Leaderboard.findById(message.author.id)
-                .then(member => send_to_channel(message.channel.id, `you have said "rin" ${member.words_today.toString()} times today`));
+                .then(member => send_to_channel(message.channel.id, `you have said "rin" ${member.words_total.toString()} times today`));
         } else if (command === "toprin") {
             console.log("rpfiewjeitge");
             let display_list = ["\`\`\`"];
@@ -297,10 +302,10 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 send_to_channel(message.channel.id, "You can only display 30 spots at the same time");
                 return;
             }
-            Leaderboard.find().sort({"words_today": "desc"}).limit(query_limit)
+            Leaderboard.find().sort({"words_total": "desc"}).limit(query_limit)
                 .then(all => {
                     all.forEach((member_data, iter) => {
-                        display_list.push(`${iter+1}- ${member_data.name}: ${member_data.words_today}`);
+                        display_list.push(`${iter+1}- ${member_data.name}: ${member_data.words_total}`);
                         
                     });
                     send_to_channel(message.channel.id, display_list.join("\n") + "\`\`\`");
@@ -315,7 +320,39 @@ ${current_hangman_lobby[room_name]["current_status"]}
         if (num < 3) {
             if (pure !== null) {
                 const rin_member = await Leaderboard.findById(message.author.id);
-                rin_member.words_today++;
+                rin_member.words_total++;
+                if (rin_member.timely.use_date) {
+                    var days_past_raw = (Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds;
+                    var days_past = Math.floor(days_past_raw);
+                    var weeks_past = Math.floor(days_past_raw / 7);
+                    var years_past = Math.floor(days_past_raw / 365);
+                    if (days_past >= 1) {
+                        rin_member.timely.daily.words = 0;
+                        rin_member.timely.daily.count += days_past * day_milliseconds;
+                        if (weeks_past >= 1) {
+                            rin_member.timely.weekly.words = 0;
+                            rin_member.timely.weekly.count += weeks_past * week_milliseconds;
+                            if (years_past >= 1) {
+                                rin_member.timely.yearly.words = 0;
+                                rin_member.timely.yearly.count += years_past * year_milliseconds;
+                            } else {
+                                rin_member.timely.yearly.words++;
+                            }
+                        } else {
+                            rin_member.timely.weekly.words++;
+                            rin_member.timely.yearly.words++;
+                        }
+                    } else {
+                        rin_member.timely.daily.words++;
+                        rin_member.timely.weekly.words++;
+                        rin_member.timely.yearly.words++;
+                    } 
+                }  else {
+                    rin_member.timely.use_date = Date.now();
+                    rin_member.timely.daily.words++;
+                    rin_member.timely.weekly.words++;
+                    rin_member.timely.yearly.words++;
+                }
                 await rin_member.save();
                 // message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
                 evidence = [];
@@ -330,8 +367,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
             }
         } else {
             const rin_member = await Leaderboard.findById(message.author.id);
-            rin_member.words_today++;
-            console.log(rin_member.words_today.toString())
+            rin_member.words_total++;
             await rin_member.save();
             evidence = [];
             count = 0;
@@ -344,7 +380,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
 
 client.on("guildCreate", server => {
     hangman_games[server.id] = {};
-})
+});
 
 client.login(process.env.token);
 
