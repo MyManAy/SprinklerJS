@@ -373,14 +373,14 @@ yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? membe
                     var weeks_past = Math.floor(days_past_raw / 7);
                     var years_past = Math.floor(days_past_raw / 365);
                     if (days_past >= 1) {
-                        rin_member.timely.daily.words = 0;
-                        rin_member.timely.daily.count += days_past * day_milliseconds;
+                        rin_member.timely.daily.words = 1;
+                        rin_member.timely.daily.count += days_past;
                         if (weeks_past >= 1) {
-                            rin_member.timely.weekly.words = 0;
-                            rin_member.timely.weekly.count += weeks_past * week_milliseconds;
+                            rin_member.timely.weekly.words = 1;
+                            rin_member.timely.weekly.count += weeks_past;
                             if (years_past >= 1) {
-                                rin_member.timely.yearly.words = 0;
-                                rin_member.timely.yearly.count += years_past * year_milliseconds;
+                                rin_member.timely.yearly.words = 1;
+                                rin_member.timely.yearly.count += years_past;
                             } else {
                                 rin_member.timely.yearly.words++;
                             }
