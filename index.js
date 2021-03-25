@@ -317,9 +317,9 @@ ${current_hangman_lobby[room_name]["current_status"]}
                         .then(member => 
                             send_to_channel(message.channel.id, 
                                 `\`\`\`
-daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
-weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
-yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+daily: ${member.words_total / (member.timely.daily.count + 1)}
+weekly: ${member.words_total / (member.timely.weekly.count + 1)}
+yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                                 \`\`\``
                             )
                         );
@@ -329,7 +329,7 @@ yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? membe
                         .then(member => 
                             send_to_channel(message.channel.id, 
                                 `\`\`\`
-daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.words_total: member.words_total / member.timely.daily.count}
+daily: ${member.words_total / (member.timely.daily.count + 1)}
                                 \`\`\``
                             )
                         );
@@ -339,7 +339,7 @@ daily: ${(member.words_total / member.timely.daily.count === Infinity) ? member.
                         .then(member => 
                             send_to_channel(message.channel.id, 
                                 `\`\`\`
-weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? member.words_total: member.words_total / member.timely.weekly.count}
+weekly: ${member.words_total / (member.timely.weekly.count + 1)}
                                 \`\`\``
                             )
                         );
@@ -349,7 +349,7 @@ weekly: ${(member.words_total / member.timely.weekly.count === Infinity) ? membe
                         .then(member => 
                             send_to_channel(message.channel.id, 
                                 `\`\`\`
-yearly: ${(member.words_total / member.timely.yearly.count === Infinity) ? member.words_total: member.words_total / member.timely.yearly.count}
+yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                                 \`\`\``
                             )
                         );
