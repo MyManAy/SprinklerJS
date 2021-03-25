@@ -66,15 +66,19 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
     client.guilds.cache.forEach(server => {
         server.members.cache.forEach(member => {
             if (member.bot) return;
-            const leaderboard = new Leaderboard({
+            try {
+                const leaderboard = new Leaderboard({
 
-                    _id: member.user.id,
-                    name: member.user.username,
-                    words_total: 0,
-                    avg_daily_words: 0
-               });
+                        _id: member.user.id,
+                        name: member.user.username,
+                        words_total: 0,
+                        avg_daily_words: 0
+                });
 
-            leaderboard.save();
+                leaderboard.save();
+            } catch (err) {
+                //...
+            }
         });
     });
 
