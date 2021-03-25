@@ -370,8 +370,8 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                 if (rin_member.timely.use_date) {
                     var days_past_raw = (Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds;
                     var days_past = Math.floor(days_past_raw);
-                    var weeks_past = Math.floor(days_past_raw / 7);
-                    var years_past = Math.floor(days_past_raw / 365);
+                    var weeks_past = Math.floor(rin_member.timely.daily.count + days_past_raw) / 7;
+                    var years_past = Math.floor(rin_member.timely.daily.count + days_past_raw) / 365;
                     if (days_past >= 1) {
                         rin_member.timely.daily.words = 1;
                         rin_member.timely.daily.count += days_past;
