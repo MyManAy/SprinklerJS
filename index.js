@@ -30,11 +30,12 @@ function replaceChars(string, index, replacement) {
     return string.substring(0, index) + replacement + string.substring(index + 1);
 }
 
-async function db_updater(search_id, add_to_total=true) {
+async function db_updater(search_id, add_to_total=true, start=true) {
+    var increment = add_to_total ? 1 : 0;
+    
     const rin_member = await Leaderboard.findById(search_id);
-    if (add_to_total) {
-        rin_member.words_total++;
-    }
+    rin_member.words_total += increment;
+
     if (rin_member.timely.use_date) {
         var days_past = Math.floor((Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds);
         var weeks_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.weekly.count * 7)) + days_past) / 7);
@@ -49,22 +50,24 @@ async function db_updater(search_id, add_to_total=true) {
                     rin_member.timely.yearly.words = 1;
                     rin_member.timely.yearly.count += years_past;
                 } else {
-                    rin_member.timely.yearly.words++;
+                    rin_member.timely.yearly.words += increment;
                 }
             } else {
-                rin_member.timely.weekly.words++;
-                rin_member.timely.yearly.words++;
+                rin_member.timely.weekly.words += increment;
+                rin_member.timely.yearly.words += increment;
             }
         } else {
-            rin_member.timely.daily.words++;
-            rin_member.timely.weekly.words++;
-            rin_member.timely.yearly.words++;
+            rin_member.timely.daily.words += increment;
+            rin_member.timely.weekly.words += increment;
+            rin_member.timely.yearly.words += increment;
         } 
     }  else {
-        rin_member.timely.use_date = Date.now();
-        rin_member.timely.daily.words++;
-        rin_member.timely.weekly.words++;
-        rin_member.timely.yearly.words++;
+        if (start) {
+            rin_member.timely.use_date = Date.now();
+            rin_member.timely.daily.words += increment;
+            rin_member.timely.weekly.words += increment;
+            rin_member.timely.yearly.words += increment;
+        }
     }
     await rin_member.save();
 }
@@ -350,7 +353,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 });
 
         } else if (command === "avgrin") {
-            db_updater(message.author.id, add_to_total=false);
+            db_updater(message.author.id, false, false);
             switch(args[0]) {
                 case undefined:
                     Leaderboard.findById(message.author.id)

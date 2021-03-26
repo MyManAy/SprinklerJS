@@ -78,7 +78,7 @@ if (list.some(role => {
             case "Admin":
                 console.log(role);
                 return true;
-                
+            
             case "bot access":
                 console.log(role);
                 return true;
