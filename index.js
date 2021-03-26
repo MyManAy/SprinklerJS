@@ -30,6 +30,43 @@ function replaceChars(string, index, replacement) {
     return string.substring(0, index) + replacement + string.substring(index + 1);
 }
 
+async function db_updater(search_id) {
+    const rin_member = await Leaderboard.findById(search_id);
+    rin_member.words_total++;
+    if (rin_member.timely.use_date) {
+        var days_past = Math.floor((Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds);
+        var weeks_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.weekly.count * 7)) + days_past) / 7);
+        var years_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.yearly.count * 365)) + days_past) / 365);
+        if (days_past >= 1) {
+            rin_member.timely.daily.words = 1;
+            rin_member.timely.daily.count += days_past;
+            if (weeks_past >= 1) {
+                rin_member.timely.weekly.words = 1;
+                rin_member.timely.weekly.count += weeks_past;
+                if (years_past >= 1) {
+                    rin_member.timely.yearly.words = 1;
+                    rin_member.timely.yearly.count += years_past;
+                } else {
+                    rin_member.timely.yearly.words++;
+                }
+            } else {
+                rin_member.timely.weekly.words++;
+                rin_member.timely.yearly.words++;
+            }
+        } else {
+            rin_member.timely.daily.words++;
+            rin_member.timely.weekly.words++;
+            rin_member.timely.yearly.words++;
+        } 
+    }  else {
+        rin_member.timely.use_date = Date.now();
+        rin_member.timely.daily.words++;
+        rin_member.timely.weekly.words++;
+        rin_member.timely.yearly.words++;
+    }
+    await rin_member.save();
+}
+
 client.once('ready', () => {
     console.log("we in this bitch");
 /*    send_to_channel(820518033520984064, 
@@ -365,40 +402,7 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
         let pure = message.content.match(/(^|[\W\s_]+)((r[\W\s_]*)+([il][\W\s_]*)+(n[\W\s_]*)+)+([\W\s_]+|$)/gi)
         if (num < 3) {
             if (pure !== null) {
-                const rin_member = await Leaderboard.findById(message.author.id);
-                rin_member.words_total++;
-                if (rin_member.timely.use_date) {
-                    var days_past = Math.floor((Date.now() - (rin_member.timely.use_date + (rin_member.timely.daily.count * day_milliseconds))) / day_milliseconds);
-                    var weeks_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.weekly.count * 7)) + days_past) / 7);
-                    var years_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.yearly.count * 365)) + days_past) / 365);
-                    if (days_past >= 1) {
-                        rin_member.timely.daily.words = 1;
-                        rin_member.timely.daily.count += days_past;
-                        if (weeks_past >= 1) {
-                            rin_member.timely.weekly.words = 1;
-                            rin_member.timely.weekly.count += weeks_past;
-                            if (years_past >= 1) {
-                                rin_member.timely.yearly.words = 1;
-                                rin_member.timely.yearly.count += years_past;
-                            } else {
-                                rin_member.timely.yearly.words++;
-                            }
-                        } else {
-                            rin_member.timely.weekly.words++;
-                            rin_member.timely.yearly.words++;
-                        }
-                    } else {
-                        rin_member.timely.daily.words++;
-                        rin_member.timely.weekly.words++;
-                        rin_member.timely.yearly.words++;
-                    } 
-                }  else {
-                    rin_member.timely.use_date = Date.now();
-                    rin_member.timely.daily.words++;
-                    rin_member.timely.weekly.words++;
-                    rin_member.timely.yearly.words++;
-                }
-                await rin_member.save();
+                db_updater(message.author.id);
                 // message.channel.send(`warning: consecutive messages containing "${pure.join('').trim()}"`);
                 evidence = [];
                 count = 0;
@@ -411,9 +415,7 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                 evidence = [];
             }
         } else {
-            const rin_member = await Leaderboard.findById(message.author.id);
-            rin_member.words_total++;
-            await rin_member.save();
+            db_updater(message.author.id);
             evidence = [];
             count = 0;
         }
