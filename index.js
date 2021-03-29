@@ -41,13 +41,13 @@ async function db_updater(search_id, add_to_total=true, start=true) {
         var weeks_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.weekly.count * 7)) + days_past) / 7);
         var years_past = Math.floor(((rin_member.timely.daily.count - (rin_member.timely.yearly.count * 365)) + days_past) / 365);
         if (days_past >= 1) {
-            rin_member.timely.daily.words = 1;
+            rin_member.timely.daily.words = increment;
             rin_member.timely.daily.count += days_past;
             if (weeks_past >= 1) {
-                rin_member.timely.weekly.words = 1;
+                rin_member.timely.weekly.words = increment;
                 rin_member.timely.weekly.count += weeks_past;
                 if (years_past >= 1) {
-                    rin_member.timely.yearly.words = 1;
+                    rin_member.timely.yearly.words = increment;
                     rin_member.timely.yearly.count += years_past;
                 } else {
                     rin_member.timely.yearly.words += increment;
