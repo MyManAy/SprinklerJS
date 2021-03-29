@@ -133,7 +133,7 @@ let hangman_games = {};
 let user_rooms = {};
 
 
-client.on("message", message => {
+client.on("message", async message => {
     let current_hangman_lobby = hangman_games[message.guild.id];
     if (!!message.author.bot) return;
 
