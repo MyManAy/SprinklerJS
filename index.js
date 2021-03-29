@@ -353,7 +353,7 @@ ${current_hangman_lobby[room_name]["current_status"]}
                 });
 
         } else if (command === "avgrin") {
-            db_updater(message.author.id, false, false);
+            await db_updater(message.author.id, false, false);
             switch(args[0]) {
                 case undefined:
                     Leaderboard.findById(message.author.id)
