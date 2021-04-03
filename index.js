@@ -30,6 +30,12 @@ function replaceChars(string, index, replacement) {
     return string.substring(0, index) + replacement + string.substring(index + 1);
 }
 
+function repeatString(string, times) {
+    if (times <= 0) return "";
+    if (times === 1) return string;
+    return string + repeatString(string, times - 1);
+ }
+
 async function db_updater(search_id, add_to_total=true, start=true) {
     var increment = add_to_total ? 1 : 0;
     
@@ -401,7 +407,7 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                     send_to_channel(message.channel.id, "Please enter daily, weekly, or yearly for arguments");
             }
         } else if (command === 'dababy') {
-            send_to_channel(message.channel.id, "les gooo");
+            send_to_channel(message.channel.id, `les goo${repeatString("o", Math.floor(Math.random() * 25))}`);
         }
     }
     async function rinAlg(num) {
