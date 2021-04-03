@@ -32,6 +32,7 @@ function replaceChars(string, index, replacement) {
 
 client.once('ready', () => {
     console.log("we in this bitch");
+    console.log()
 /*    send_to_channel(820518033520984064, 
         `
 \`\`\`bash
@@ -63,8 +64,10 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
         hangman_games[server.id] = {};
     });
     client.guilds.cache.forEach(server => {
+        let memberList = [];
         server.members.cache.forEach(member => {
             if (member.bot) return;
+            memberList.push(member.user.username);
             const leaderboard = new Leaderboard({
 
                     _id: member.user.id,
@@ -72,10 +75,10 @@ __/\\\\\\\\____________/\\\\\\\\________________________________
                     words_total: 0,
                     avg_daily_words: 0
             });
-
-            leaderboard.save();
+            
             
         });
+        console.log(memberList);
     });
 
 });

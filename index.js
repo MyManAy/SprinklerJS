@@ -400,6 +400,8 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
                 default:
                     send_to_channel(message.channel.id, "Please enter daily, weekly, or yearly for arguments");
             }
+        } else if (command === 'dababy') {
+            send_to_channel(message.channel.id, "les gooo");
         }
     }
     async function rinAlg(num) {
