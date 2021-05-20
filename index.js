@@ -57,27 +57,6 @@ const db_triggered = async (rin_member, increment) => {
       days_past) /
       365
   );
-  /*if (days_past >= 1) {
-        rin_member.timely.daily.words = increment;
-        rin_member.timely.daily.count += days_past;
-        if (weeks_past >= 1) {
-            rin_member.timely.weekly.words = increment;
-            rin_member.timely.weekly.count += weeks_past;
-            if (years_past >= 1) {
-                rin_member.timely.yearly.words = increment;
-                rin_member.timely.yearly.count += years_past;
-            } else {
-                rin_member.timely.yearly.words += increment;
-            }
-        } else {
-            rin_member.timely.weekly.words += increment;
-            rin_member.timely.yearly.words += increment;
-        }
-    } else {
-        rin_member.timely.daily.words += increment;
-        rin_member.timely.weekly.words += increment;
-        rin_member.timely.yearly.words += increment;
-    }*/
 
   if (!(days_past >= 1))
     return (() => {
@@ -539,6 +518,13 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
         message.channel.id,
         `les goo${repeatString("o", Math.floor(Math.random() * 25))}`
       );
+    } else if (command === "saveprofile") {
+      const profile = new Profile({
+        _id: member.user.id,
+        roles: member.roles.cache.map((role) => role),
+      });
+
+      profile.save();
     }
   }
   async function rinAlg(num) {
