@@ -521,7 +521,7 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
     } else if (command === "saveprofile") {
       const profile = new Profile({
         _id: member.user.id,
-        roles: member.roles.cache.map((role) => role),
+        //roles: member.roles.cache.map((role) => role),
       });
 
       profile.save();
