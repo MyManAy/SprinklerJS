@@ -1,4 +1,3 @@
-
 /*const rRegex = /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
 const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
 const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
@@ -32,7 +31,7 @@ hangman_games: [
         complete_word: ""
     }
 ]
-`
+`;
 /*var hangman_games = {};
 var current_status = empty.join("    ").replace(/\S/gi, "_");
 var test = 48292459853
@@ -71,7 +70,7 @@ if (!matches.length) {
     }
 
 })*/
-list  = ["Admn", "dede", "devenoper"]
+/*list  = ["Admn", "dede", "devenoper"]
   
 if (list.some(role => {
         switch(role) {
@@ -92,4 +91,13 @@ if (list.some(role => {
 } else {
     console.log("Sorry you don't have the correct permissions!");
     return;
-}
+}*/
+
+const smth = (yup) => {
+  if (!(yup === 5))
+    return (function () {
+      console.log("doke");
+    })();
+};
+
+smth(2);
