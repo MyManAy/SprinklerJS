@@ -39,4 +39,4 @@ const profileSchema = new Schema({
 const Profile = mongoose.model("Profile", profileSchema);
 const Leaderboard = mongoose.model("Leaderboard", leaderboardSchema);
 
-export { Profile, Leaderboard };
+module.exports = { Profile, Leaderboard };
