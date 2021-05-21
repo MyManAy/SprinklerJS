@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_DB_CONN, {
 });
 
 const Leaderboard = require("./leaderboard");
-const Profile = require("./Profile");
+const Profile = require("./profile");
 
 const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL } });
 
@@ -105,7 +105,6 @@ async function db_updater(search_id, add_to_total = true, start = true) {
 }
 
 client.once("ready", () => {
-  console.log("we in this bitch");
   /*    send_to_channel(820518033520984064, 
         `
 \`\`\`bash
@@ -519,12 +518,57 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
         `les goo${repeatString("o", Math.floor(Math.random() * 25))}`
       );
     } else if (command === "saveprofile") {
-      const profile = new Profile({
-        _id: member.user.id,
-        //roles: member.roles.cache.map((role) => role),
-      });
+      Profile.findById(message.author.id)
+        .then((member) => {
+          member.guilds.push({
+            guild: message.member.guild.id,
+            roles: message.member.roles.cache.map((role) => role.id),
+          });
+          member.save();
+        })
+        .catch(() => {
+          const profile = new Profile({
+            _id: message.member.id,
+            guilds: [
+              {
+                guild: message.member.guild.id,
+                roles: message.member.roles.cache.map((role) => role.id),
+              },
+            ],
+          });
+          profile.save();
+        });
 
-      profile.save();
+      send_to_channel(message.channel.id, `profile has been saved`);
+    } else if (command === "loadprofile") {
+      Profile.findById(message.author.id)
+        .then((profileUser) => {
+          const { roles: profileRoles } = profileUser.guilds.find(
+            (guild) => guild.guild === message.member.guild.id
+          );
+
+          profileRoles.forEach((role_id) => {
+            const foundRole = message.member.guild.roles.cache.find(
+              (guildRole) => guildRole.id === role_id
+            );
+            if (!foundRole)
+              return send_to_channel(
+                message.channel.id,
+                `Sorry, one of the roles from your saved profile does not exist and we could not add the role`
+              );
+            message.member.roles.add(foundRole);
+          });
+          send_to_channel(
+            message.channel.id,
+            `Your previous profile has been loaded!`
+          );
+        })
+        .catch(() => {
+          send_to_channel(
+            message.channel.id,
+            `You do not have a profile saved yet, use <saveprofile>`
+          );
+        });
     }
   }
   async function rinAlg(num) {
