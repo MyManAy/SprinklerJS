@@ -7,8 +7,7 @@ mongoose.connect(process.env.MONGO_DB_CONN, {
   useUnifiedTopology: true,
 });
 
-const Leaderboard = require("./leaderboard");
-const Profile = require("./profile");
+const { Leaderboard, Profile } = require("./leaderboard");
 
 const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL } });
 
