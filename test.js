@@ -1,5 +1,6 @@
-/*const rRegex = /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
-const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
+const rRegex =
+  /(^|[\W\s_]+)(r[\W\s_]*)+(?=(([il][\W\s_]*)+(((n[\W\s_]*)+)?((s[\W\s_]*)+)?)?)?$)/gi;
+/*const iRegex = /(?<=(^|[\W\s_]+)r*)([il][\W\s_]*)+(?=((n[\W\s_]*)+((s[\W\s_]*)+)?)?$)/gi;
 const nRegex = /(?<=(^|[\W\s_]+)r*i*)(n[\W\s_]*)+(?=((s[\W\s_]*)+)?$)/gi;
 search_word = "dog"
 search_letters = search_word.split("")
@@ -93,11 +94,6 @@ if (list.some(role => {
     return;
 }*/
 
-const smth = (yup) => {
-  if (!(yup === 5))
-    return (function () {
-      console.log("doke");
-    })();
-};
-
-smth(2);
+list = [5, 4];
+list.splice(undefined, 1);
+console.log(list);

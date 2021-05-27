@@ -7,8 +7,7 @@ mongoose.connect(
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-const Leaderboard = require("./leaderboard");
-const Profile = require("./profile");
+const { Leaderboard, Profile } = require("./leaderboard");
 
 const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL } });
 
@@ -518,23 +517,27 @@ yearly: ${member.words_total / (member.timely.yearly.count + 1)}
         `les goo${repeatString("o", Math.floor(Math.random() * 25))}`
       );
     } else if (command === "saveprofile") {
+      const profileData = {
+        guild: message.member.guild.id,
+        roles: message.member.roles.cache.map((role) => role.id),
+      };
       Profile.findById(message.author.id)
         .then((member) => {
-          member.guilds.push({
-            guild: message.member.guild.id,
-            roles: message.member.roles.cache.map((role) => role.id),
-          });
+          const profileGuildFinder = (guild) =>
+            guild.guild === message.member.guild.id;
+          const previousProfile = member.guilds.some(profileGuildFinder);
+          if (previousProfile) {
+            const profileGuildIndex =
+              member.guilds.findIndex(profileGuildFinder);
+            member.guilds.splice(profileGuildIndex, 1);
+          }
+          member.guilds.push(profileData);
           member.save();
         })
         .catch(() => {
           const profile = new Profile({
             _id: message.member.id,
-            guilds: [
-              {
-                guild: message.member.guild.id,
-                roles: message.member.roles.cache.map((role) => role.id),
-              },
-            ],
+            guilds: [profileData],
           });
           profile.save();
         });
