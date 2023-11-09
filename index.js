@@ -13,7 +13,7 @@ const client = new Discord.Client({ ws: { intents: Discord.Intents.ALL } });
 
 const prefix = /^<.+>$/;
 
-const ADMIN_ID = 424006675016581122;
+const ADMIN_ID = process.env.ADMIN_ID;
 
 const day_milliseconds = 86400000;
 
